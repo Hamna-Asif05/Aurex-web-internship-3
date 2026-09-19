@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hamna Asif — Full-Stack Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================
+   AUREX Week 3 — full build
+   ============================================ */
+
+:root {
+  --bg:        #0e1013;
+  --bg-soft:   #151820;
+  --card:      #15181f;
+  --border:    #262a33;
+  --text:      #edeef2;
+  --text-muted:#969ba8;
+  --accent:    #5b8def;
+  --radius-sm: 6px;
+  --maxw:      1080px;
+  --font-display: 'Fraunces', serif;
+  --font-body:    'Inter', sans-serif;
+  --font-mono:    'IBM Plex Mono', monospace;
+}
+
+html[data-theme="light"] {
+  --bg:        #faf9f6;
+  --bg-soft:   #ffffff;
+  --card:      #ffffff;
+  --border:    #e2e0d8;
+  --text:      #17181b;
+  --text-muted:#6b6e78;
+  --accent:    #2f5fd0;
+}
+
+/* ---- Reset ---- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.7;
+  transition: background 0.4s ease, color 0.4s ease;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+input, textarea { font-family: inherit; }
+
+.section {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: clamp(4.5rem, 10vw, 7.5rem) clamp(1.25rem, 4vw, 2rem);
+  border-bottom: 1px solid var(--border);
+}
+.section__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 3.5rem;
+}
+.section__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.7rem, 3vw, 2.1rem);
+}
+.section__sub { color: var(--text-muted); font-size: 0.95rem; max-width: 34ch; }
+.section__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--accent);
+  letter-spacing: 0.03em;
+  margin-bottom: 0.9rem;
+  display: block;
+}
+
+/* ---- Nav ---- */
+.nav {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 2rem clamp(1.25rem, 4vw, 2rem) 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.nav__brand { font-family: var(--font-display); font-weight: 600; font-size: 1.15rem; }
+.nav__links { display: flex; gap: clamp(2rem, 4vw, 3.5rem); }
+.nav__link {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  transition: color 0.25s ease;
+  position: relative;
+}
+.nav__link:hover { color: var(--text); }
+.nav__link::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: -5px;
+  width: 0; height: 1px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+.nav__link:hover::after { width: 100%; }
+
+.nav__right { display: flex; align-items: center; gap: 1.5rem; }
+
+.theme-toggle { background: none; border: 1px solid var(--border); border-radius: 999px; cursor: pointer; padding: 2px; }
+.theme-toggle__track { width: 40px; height: 22px; border-radius: 999px; display: block; position: relative; }
+.theme-toggle__thumb {
+  position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  transition: transform 0.3s ease;
+}
+html[data-theme="light"] .theme-toggle__thumb { transform: translateX(18px); }
+
+.nav__burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.nav__burger span { width: 20px; height: 1.5px; background: var(--text); transition: transform 0.25s ease, opacity 0.25s ease; }
+
+@media (max-width: 640px) {
+  .nav__links {
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    flex-direction: column;
+    gap: 0;
+    background: var(--bg-soft);
+    border-bottom: 1px solid var(--border);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+  }
+  .nav__links.is-open { max-height: 220px; }
+  .nav__link { padding: 1rem clamp(1.25rem, 4vw, 2rem); border-top: 1px solid var(--border); }
+  .nav__burger { display: flex; }
+}
+
+/* ---- Hero ---- */
+.hero {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: clamp(4rem, 10vw, 7rem) clamp(1.25rem, 4vw, 2rem) clamp(5rem, 10vw, 8rem);
+  border-bottom: 1px solid var(--border);
+}
+.hero__eyebrow { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.4rem; }
+.hero__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  line-height: 1.14;
+  letter-spacing: -0.015em;
+  max-width: 18ch;
+}
+.hero__title-accent { color: var(--accent); font-style: italic; }
+.hero__lede { margin-top: 2rem; max-width: 52ch; font-size: clamp(1rem, 1.6vw, 1.1rem); color: var(--text-muted); }
+.hero__actions { margin-top: 2.75rem; display: flex; gap: 1.5rem; flex-wrap: wrap; }
+
+.btn {
+  position: relative; overflow: hidden;
+  padding: 1.05rem 2.1rem;
+  border-radius: var(--radius-sm);
+  font-weight: 500; font-size: 0.92rem;
+  letter-spacing: 0.01em;
+  display: inline-block;
+  transition: transform 0.25s ease, opacity 0.25s ease, border-color 0.25s ease;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+.btn--primary { background: var(--accent); color: #0b0d10; }
+.btn--primary:hover { opacity: 0.9; }
+.btn--ghost { border: 1px solid var(--border); color: var(--text); }
+.btn--ghost:hover { border-color: var(--accent); }
+.btn__ripple {
+  position: absolute; width: 10px; height: 10px;
+  background: rgba(255,255,255,0.4); border-radius: 50%;
+  transform: translate(-50%, -50%); pointer-events: none;
+  animation: ripple 0.6s ease-out forwards;
+}
+
+/* ---- About ---- */
+.about__grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+.about__text { font-size: 1.02rem; color: var(--text-muted); max-width: 58ch; }
+.about__text + .about__text { margin-top: 1.2rem; }
+
+.stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.stat { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1.75rem 1.5rem; }
+.stat__num { font-family: var(--font-display); font-size: 1.9rem; color: var(--accent); }
+.stat__label { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.3rem; }
+
+@media (max-width: 760px) {
+  .about__grid { grid-template-columns: 1fr; }
+}
+
+/* ---- Work / Showcase ---- */
+.showcase__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: clamp(1.25rem, 3vw, 2rem);
+}
+.project-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 2rem;
+  display: flex; flex-direction: column; gap: 1.1rem;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+.project-card:hover { background: var(--bg-soft); border-color: var(--accent); }
+.project-card__meta { display: flex; justify-content: space-between; align-items: baseline; }
+.project-card__index { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); }
+.project-card__stack { font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent); }
+.project-card__title { font-family: var(--font-display); font-weight: 500; font-size: 1.2rem; transition: color 0.25s ease; }
+.project-card:hover .project-card__title { color: var(--accent); }
+.project-card__desc { color: var(--text-muted); font-size: 0.92rem; flex: 1; }
+.project-card__link {
+  font-size: 0.85rem; font-weight: 500;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem; margin-top: auto;
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.project-card__arrow { transition: transform 0.25s ease; }
+.project-card:hover .project-card__arrow { transform: translateX(4px); }
+
+/* ---- Skills ---- */
+.skills__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: clamp(2rem, 5vw, 3.5rem);
+}
+.skill-group__title { font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.4rem; }
+.skill { margin-bottom: 1.4rem; }
+.skill__top { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.skill__bar { height: 4px; background: var(--border); border-radius: 999px; overflow: hidden; }
+.skill__bar-fill {
+  height: 100%; background: var(--accent); border-radius: 999px;
+  width: 0%; transition: width 1s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.skill-group.is-visible .skill__bar-fill { width: var(--pct); }
+
+/* ---- Timeline ---- */
+.timeline { display: flex; flex-direction: column; gap: 0; }
+.timeline-item {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 2rem;
+  padding: 2.25rem 0;
+  border-top: 1px solid var(--border);
+}
+.timeline-item:first-child { border-top: none; }
+.timeline-item__date { font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-muted); }
+.timeline-item__title { font-family: var(--font-display); font-size: 1.1rem; margin-bottom: 0.4rem; }
+.timeline-item__desc { color: var(--text-muted); font-size: 0.92rem; max-width: 56ch; }
+
+/* ---- Contact ---- */
+.contact__grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(2rem, 5vw, 4rem); }
+.contact__text { color: var(--text-muted); max-width: 40ch; }
+.contact__email { display: inline-block; margin-top: 1.5rem; font-weight: 500; border-bottom: 1px solid var(--border); transition: border-color 0.25s ease, color 0.25s ease; }
+.contact__email:hover { color: var(--accent); border-color: var(--accent); }
+
+.form { display: flex; flex-direction: column; gap: 1.5rem; }
+.form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.field { display: flex; flex-direction: column; gap: 0.6rem; }
+.field label { font-size: 0.82rem; color: var(--text-muted); }
+.field input, .field textarea {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.95rem 1.1rem;
+  color: var(--text);
+  font-size: 0.92rem;
+  transition: border-color 0.25s ease;
+}
+.field input:focus, .field textarea:focus { outline: none; border-color: var(--accent); }
+.field textarea { resize: vertical; min-height: 110px; }
+
+@media (max-width: 760px) {
+  .contact__grid { grid-template-columns: 1fr; }
+  .form__row { grid-template-columns: 1fr; }
+}
+
+/* ---- Stack chips (compact toolbox row) ---- */
+.stack-row { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 1.5rem; }
+.stack-row .chip {
+  font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted);
+  border: 1px solid var(--border); padding: 0.4rem 0.85rem; border-radius: 999px;
+  transition: border-color 0.25s ease, color 0.25s ease;
+}
+.stack-row .chip:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ---- Footer ---- */
+.footer {
+  max-width: var(--maxw); margin: 0 auto;
+  padding: clamp(3rem, 6vw, 4rem) clamp(1.25rem, 4vw, 2rem);
+  display: flex; flex-wrap: wrap; gap: 1.5rem;
+  justify-content: space-between; align-items: center;
+}
+.footer__text { color: var(--text-muted); font-size: 0.9rem; }
+.footer__social { display: flex; gap: 1.3rem; }
+.footer__social a { font-size: 0.88rem; color: var(--text-muted); transition: color 0.25s ease; }
+.footer__social a:hover { color: var(--accent); }
+
+/* ---- Back to top ---- */
+.to-top {
+  position: fixed; right: 1.5rem; bottom: 1.5rem;
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease, border-color 0.25s ease;
+  z-index: 20;
+}
+.to-top.is-visible { opacity: 1; pointer-events: auto; }
+.to-top:hover { border-color: var(--accent); transform: translateY(-3px); }
+
+/* ---- Animations ---- */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.anim-item { opacity: 0; animation: fadeUp 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; animation-delay: calc(var(--d) * 0.1s); }
+
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+@keyframes ripple {
+  from { width: 0; height: 0; opacity: 0.55; }
+  to   { width: 240px; height: 240px; opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+  <!-- ===== NAV ===== -->
+  <header class="nav">
+    <a class="nav__brand" href="#top">Hamna Asif</a>
+    <nav class="nav__links" id="navLinks">
+      <a class="nav__link" href="#about">About</a>
+      <a class="nav__link" href="#work">Work</a>
+      <a class="nav__link" href="#skills">Skills</a>
+      <a class="nav__link" href="#timeline">Timeline</a>
+      <a class="nav__link" href="#contact">Contact</a>
+    </nav>
+    <div class="nav__right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle color theme">
+        <span class="theme-toggle__track"><span class="theme-toggle__thumb"></span></span>
+      </button>
+      <button class="nav__burger" id="navBurger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="top">
+    <p class="hero__eyebrow anim-item" style="--d:0">Full-stack developer, Lahore</p>
+    <h1 class="hero__title anim-item" style="--d:1">
+      Interfaces built to hold up<br>
+      <span class="hero__title-accent">under real use.</span>
+    </h1>
+    <p class="hero__lede anim-item" style="--d:2">
+      I work across the stack — React front ends, Node back ends, and the
+      structural CSS decisions in between that decide whether a layout
+      feels considered or assembled.
+    </p>
+    <div class="hero__actions anim-item" style="--d:3">
+      <a class="btn btn--primary" href="#work">View selected work</a>
+      <a class="btn btn--ghost" href="#contact">Get in touch</a>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section class="section reveal" id="about">
+    <span class="section__eyebrow">About</span>
+    <div class="about__grid">
+      <div>
+        <p class="about__text">
+          I'm a Computer Science student at the University of the Punjab,
+          currently deep in a structured web development track at NAVTECH.
+          I like projects where the front end and back end are designed
+          together — where a layout decision on the client side and a
+          schema decision on the server side are really the same decision.
+        </p>
+        <p class="about__text">
+          Most of what I build lives in React and Node, with MySQL or
+          Supabase underneath. On the design side, I care about the same
+          things I'm practicing here: grid systems, restrained motion,
+          and interfaces that don't need explaining.
+        </p>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="stat__num">6+</div><div class="stat__label">Projects shipped</div></div>
+        <div class="stat"><div class="stat__num">3</div><div class="stat__label">Full-stack apps</div></div>
+        <div class="stat"><div class="stat__num">2</div><div class="stat__label">Years learning to build</div></div>
+        <div class="stat"><div class="stat__num">1</div><div class="stat__label">Portfolio, always evolving</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WORK ===== -->
+  <section class="section reveal" id="work">
+    <div class="section__head">
+      <div>
+        <span class="section__eyebrow">Work</span>
+        <h2 class="section__title">Selected projects</h2>
+      </div>
+      <p class="section__sub">Four projects, four different layout and data problems.</p>
+    </div>
+
+    <div class="showcase__grid">
+      <article class="project-card">
+        <div class="project-card__meta"><span class="project-card__index">01</span><span class="project-card__stack">React · Node</span></div>
+        <h3 class="project-card__title">AI Study Planner</h3>
+        <p class="project-card__desc">Generates a personalised timetable and re-balances it automatically as deadlines shift.</p>
+        <a class="project-card__link" href="#">View project <span class="project-card__arrow">→</span></a>
+      </article>
+      <article class="project-card">
+        <div class="project-card__meta"><span class="project-card__index">02</span><span class="project-card__stack">Vite · Supabase</span></div>
+        <h3 class="project-card__title">HireLens AI</h3>
+        <p class="project-card__desc">Resume analysis and mock interviews, built to give job-ready feedback in minutes.</p>
+        <a class="project-card__link" href="#">View project <span class="project-card__arrow">→</span></a>
+      </article>
+      <article class="project-card">
+        <div class="project-card__meta"><span class="project-card__index">03</span><span class="project-card__stack">HTML · CSS</span></div>
+        <h3 class="project-card__title">WanderWay</h3>
+        <p class="project-card__desc">A travel agency site anchored by a marquee hero and a structured package grid.</p>
+        <a class="project-card__link" href="#">View project <span class="project-card__arrow">→</span></a>
+      </article>
+      <article class="project-card">
+        <div class="project-card__meta"><span class="project-card__index">04</span><span class="project-card__stack">React · MySQL</span></div>
+        <h3 class="project-card__title">Photo Gallery CRUD</h3>
+        <p class="project-card__desc">A public gallery with full create, read, update and delete — no login required.</p>
+        <a class="project-card__link" href="#">View project <span class="project-card__arrow">→</span></a>
+      </article>
+    </div>
+
+    <div class="stack-row">
+      <span class="chip">HTML5</span><span class="chip">CSS Grid</span><span class="chip">Flexbox</span>
+      <span class="chip">JavaScript</span><span class="chip">React</span><span class="chip">Node.js</span>
+      <span class="chip">MySQL</span><span class="chip">Figma</span>
+    </div>
+  </section>
+
+  <!-- ===== SKILLS ===== -->
+  <section class="section reveal" id="skills">
+    <span class="section__eyebrow">Skills</span>
+    <div class="section__head" style="margin-top: 0.5rem;">
+      <h2 class="section__title">What I work with</h2>
+      <p class="section__sub">Grouped by where it sits in the stack.</p>
+    </div>
+
+    <div class="skills__grid">
+      <div class="skill-group">
+        <div class="skill-group__title">Frontend</div>
+        <div class="skill"><div class="skill__top"><span>React</span><span>90%</span></div><div class="skill__bar"><div class="skill__bar-fill" style="--pct:90%"></div></div></div>
+        <div class="skill"><div class="skill__top"><span>CSS / Grid &amp; Flexbox</span><span>92%</span></div><div class="skill__bar"><div class="skill__bar-fill" style="--pct:92%"></div></div></div>
+        <div class="skill"><div class="skill__top"><span>JavaScript</span><span>85%</span></div><div class="skill__bar"><div class="skill__bar-fill" style="--pct:85%"></div></div></div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group__title">Backend</div>
+        <div class="skill"><div class="skill__top"><span>Node.js / Express</span><span>80%</span></div><div class="skill__bar"><div class="skill__bar-fill" style="--pct:80%"></div></div></div>
+        <div class="skill"><div class="skill__top"><span>MySQL</span><span>75%</span></div><div class="skill__bar"><div class="skill__bar-fill" style="--pct:75%"></div></div></div>
+        <div class="skill"><div class="skill__top"><span>Supabase</span><span>70%</span></div><div class="skill__bar"><div class="skill__bar-fill" style="--pct:70%"></div></div></div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group__title">Design &amp; Tools</div>
+        <div class="skill"><div class="skill__top"><span>Figma</span><span>78%</span></div><div class="skill__bar"><div class="skill__bar-fill" style="--pct:78%"></div></div></div>
+        <div class="skill"><div class="skill__top"><span>Git / GitHub</span><span>82%</span></div><div class="skill__bar"><div class="skill__bar-fill" style="--pct:82%"></div></div></div>
+        <div class="skill"><div class="skill__top"><span>Responsive design</span><span>88%</span></div><div class="skill__bar"><div class="skill__bar-fill" style="--pct:88%"></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TIMELINE ===== -->
+  <section class="section reveal" id="timeline">
+    <span class="section__eyebrow">Timeline</span>
+    <div class="section__head" style="margin-top: 0.5rem;">
+      <h2 class="section__title">Education &amp; path</h2>
+      <p class="section__sub">Where the learning is coming from.</p>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-item__date">Ongoing</div>
+        <div>
+          <div class="timeline-item__title">BS Computer Science</div>
+          <div class="timeline-item__desc">University of the Punjab, Lahore — core CS coursework alongside independent full-stack projects.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-item__date">Ongoing</div>
+        <div>
+          <div class="timeline-item__title">Web Development Track — NAVTECH</div>
+          <div class="timeline-item__desc">Structured curriculum covering front-end fundamentals through full-stack application development.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-item__date">This week</div>
+        <div>
+          <div class="timeline-item__title">AUREX Internship — Week 3</div>
+          <div class="timeline-item__desc">Advanced CSS Grid &amp; Flexbox, keyframe animation, and responsive UI polish — applied directly to this page.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section class="section reveal" id="contact">
+    <span class="section__eyebrow">Contact</span>
+    <div class="contact__grid" style="margin-top: 0.5rem;">
+      <div>
+        <h2 class="section__title">Let's talk</h2>
+        <p class="contact__text">Open to internships, freelance front-end work, and collaborations. The fastest way to reach me is email.</p>
+        <a class="contact__email" href="mailto:hamnaasif623@gmail.com">hamnaasif623@gmail.com</a>
+      </div>
+      <form class="form" onsubmit="return false;">
+        <div class="form__row">
+          <div class="field"><label for="name">Name</label><input id="name" type="text" placeholder="Your name"></div>
+          <div class="field"><label for="email">Email</label><input id="email" type="email" placeholder="you@example.com"></div>
+        </div>
+        <div class="field"><label for="message">Message</label><textarea id="message" placeholder="What are you working on?"></textarea></div>
+        <button class="btn btn--primary" type="submit" style="align-self: flex-start;">Send message</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <p class="footer__text">© 2026 Hamna Asif. Built with HTML, CSS &amp; a lot of grid.</p>
+    <div class="footer__social">
+      <a href="https://github.com/Hamna-Asif05" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://linkedin.com/in/hamna-asif5" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </footer>
+
+  <button class="to-top" id="toTop" aria-label="Back to top">↑</button>
+
+  <script>
+    // Theme toggle
+    const root = document.documentElement;
+    const toggle = document.getElementById('themeToggle');
+    const saved = localStorage.getItem('aurex-theme');
+    if (saved) root.setAttribute('data-theme', saved);
+    toggle.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('aurex-theme', next);
+    });
+
+    // Mobile nav
+    const burger = document.getElementById('navBurger');
+    const navLinks = document.getElementById('navLinks');
+    burger.addEventListener('click', () => navLinks.classList.toggle('is-open'));
+    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('is-open')));
+
+    // Button ripple
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('click', function (e) {
+        const rect = this.getBoundingClientRect();
+        const ripple = document.createElement('span');
+        ripple.className = 'btn__ripple';
+        ripple.style.left = (e.clientX - rect.left) + 'px';
+        ripple.style.top = (e.clientY - rect.top) + 'px';
+        this.appendChild(ripple);
+        ripple.addEventListener('animationend', () => ripple.remove());
+      });
+    });
+
+    // Scroll-reveal for sections + skill bars
+    const revealTargets = document.querySelectorAll('.reveal, .skill-group');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealTargets.forEach(el => io.observe(el));
+
+    // Back-to-top visibility
+    const toTop = document.getElementById('toTop');
+    window.addEventListener('scroll', () => {
+      toTop.classList.toggle('is-visible', window.scrollY > 500);
+    });
+    toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  </script>
+
+</body>
+</html>
