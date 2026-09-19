@@ -1,0 +1,311 @@
+/* ============================================
+   AUREX Week 3 — main.css
+   Layout, CSS Grid, Flexbox, typography, theme tokens
+   (Hover states, transitions & keyframes live in animations.css)
+   ============================================ */
+
+/* ---- 1. Theme tokens (CSS Custom Properties) ---- */
+:root {
+  --bg:        #0e1013;
+  --bg-soft:   #151820;
+  --card:      #15181f;
+  --border:    #262a33;
+  --text:      #edeef2;
+  --text-muted:#969ba8;
+  --accent:    #5b8def;
+  --radius-sm: 6px;
+  --maxw:      1080px;
+  --font-display: 'Fraunces', serif;
+  --font-body:    'Inter', sans-serif;
+  --font-mono:    'IBM Plex Mono', monospace;
+}
+
+html[data-theme="light"] {
+  --bg:        #faf9f6;
+  --bg-soft:   #ffffff;
+  --card:      #ffffff;
+  --border:    #e2e0d8;
+  --text:      #17181b;
+  --text-muted:#6b6e78;
+  --accent:    #2f5fd0;
+}
+
+/* ---- 2. Reset ---- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+input, textarea { font-family: inherit; }
+
+/* ---- 3. Section shell (shared layout for every section) ---- */
+.section {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: clamp(4.5rem, 10vw, 7.5rem) clamp(1.25rem, 4vw, 2rem);
+  border-bottom: 1px solid var(--border);
+}
+.section__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 3.5rem;
+}
+.section__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.7rem, 3vw, 2.1rem);
+}
+.section__sub { color: var(--text-muted); font-size: 0.95rem; max-width: 34ch; }
+.section__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--accent);
+  letter-spacing: 0.03em;
+  margin-bottom: 0.9rem;
+  display: block;
+}
+
+/* ---- 4. Nav (Flexbox) ---- */
+.nav {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 2rem clamp(1.25rem, 4vw, 2rem) 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.nav__brand { font-family: var(--font-display); font-weight: 600; font-size: 1.15rem; }
+.nav__links { display: flex; gap: clamp(2.25rem, 4vw, 4rem); }
+.nav__link { font-size: 0.9rem; color: var(--text-muted); position: relative; }
+.nav__link::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: -5px;
+  width: 0; height: 1px;
+  background: var(--accent);
+}
+.nav__right { display: flex; align-items: center; gap: 1.5rem; }
+
+.theme-toggle { background: none; border: 1px solid var(--border); border-radius: 999px; cursor: pointer; padding: 2px; }
+.theme-toggle__track { width: 40px; height: 22px; border-radius: 999px; display: block; position: relative; }
+.theme-toggle__thumb {
+  position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+html[data-theme="light"] .theme-toggle__thumb { transform: translateX(18px); }
+
+.nav__burger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; }
+.nav__burger span { width: 20px; height: 1.5px; background: var(--text); }
+
+@media (max-width: 640px) {
+  .nav__links {
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    flex-direction: column;
+    gap: 0;
+    background: var(--bg-soft);
+    border-bottom: 1px solid var(--border);
+    max-height: 0;
+    overflow: hidden;
+  }
+  .nav__links.is-open { max-height: 220px; }
+  .nav__link { padding: 1rem clamp(1.25rem, 4vw, 2rem); border-top: 1px solid var(--border); }
+  .nav__burger { display: flex; }
+}
+
+/* ---- 5. Hero ---- */
+.hero {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: clamp(4rem, 10vw, 7rem) clamp(1.25rem, 4vw, 2rem) clamp(5rem, 10vw, 8rem);
+  border-bottom: 1px solid var(--border);
+}
+.hero__eyebrow { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.4rem; }
+.hero__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  line-height: 1.14;
+  letter-spacing: -0.015em;
+  max-width: 18ch;
+}
+.hero__title-accent { color: var(--accent); font-style: italic; }
+.hero__lede { margin-top: 2rem; max-width: 52ch; font-size: clamp(1rem, 1.6vw, 1.1rem); color: var(--text-muted); }
+.hero__actions { margin-top: 2.75rem; display: flex; gap: 1.75rem; flex-wrap: wrap; }
+
+/* ---- 6. Buttons (base look — motion lives in animations.css) ---- */
+.btn {
+  position: relative;
+  overflow: hidden;
+  padding: 1.15rem 2.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  letter-spacing: 0.015em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.btn--primary {
+  background: var(--accent);
+  color: #0b0d10;
+  border: 1px solid var(--accent);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.15) inset;
+}
+.btn--ghost {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--text);
+}
+
+/* ---- 7. About (Grid) ---- */
+.about__grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+.about__text { font-size: 1.02rem; color: var(--text-muted); max-width: 58ch; }
+.about__text + .about__text { margin-top: 1.2rem; }
+
+.stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.stat { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1.75rem 1.5rem; }
+.stat__num { font-family: var(--font-display); font-size: 1.9rem; color: var(--accent); }
+.stat__label { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.3rem; }
+
+@media (max-width: 760px) {
+  .about__grid { grid-template-columns: 1fr; }
+}
+
+/* ---- 8. Work / Showcase — CSS GRID (auto-fit / minmax) ---- */
+.showcase__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: clamp(1.25rem, 3vw, 2rem);
+}
+.project-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+.project-card__meta { display: flex; justify-content: space-between; align-items: baseline; }
+.project-card__index { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); }
+.project-card__stack { font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent); }
+.project-card__title { font-family: var(--font-display); font-weight: 500; font-size: 1.2rem; }
+.project-card__desc { color: var(--text-muted); font-size: 0.92rem; flex: 1; }
+.project-card__link {
+  font-size: 0.85rem; font-weight: 500;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem; margin-top: auto;
+  display: flex; align-items: center; gap: 0.4rem;
+}
+
+/* ---- 9. Skills (Grid + Flexbox) ---- */
+.skills__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: clamp(2rem, 5vw, 3.5rem);
+}
+.skill-group__title { font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.4rem; }
+.skill { margin-bottom: 1.4rem; }
+.skill__top { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.skill__bar { height: 4px; background: var(--border); border-radius: 999px; overflow: hidden; }
+.skill__bar-fill { height: 100%; background: var(--accent); border-radius: 999px; width: 0%; }
+
+/* ---- 10. Timeline (Grid) ---- */
+.timeline { display: flex; flex-direction: column; gap: 0; }
+.timeline-item {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 2rem;
+  padding: 2.25rem 0;
+  border-top: 1px solid var(--border);
+}
+.timeline-item:first-child { border-top: none; }
+.timeline-item__date { font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-muted); }
+.timeline-item__title { font-family: var(--font-display); font-size: 1.1rem; margin-bottom: 0.4rem; }
+.timeline-item__desc { color: var(--text-muted); font-size: 0.92rem; max-width: 56ch; }
+
+/* ---- 11. Contact (Grid + Flexbox form) ---- */
+.contact__grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(2rem, 5vw, 4rem); }
+.contact__text { color: var(--text-muted); max-width: 40ch; }
+.contact__email { display: inline-block; margin-top: 1.5rem; font-weight: 500; border-bottom: 1px solid var(--border); }
+
+.form { display: flex; flex-direction: column; gap: 1.5rem; }
+.form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.field { display: flex; flex-direction: column; gap: 0.6rem; }
+.field label { font-size: 0.82rem; color: var(--text-muted); }
+.field input, .field textarea {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.95rem 1.1rem;
+  color: var(--text);
+  font-size: 0.92rem;
+}
+.field input:focus, .field textarea:focus { outline: none; }
+.field textarea { resize: vertical; min-height: 110px; }
+
+@media (max-width: 760px) {
+  .contact__grid { grid-template-columns: 1fr; }
+  .form__row { grid-template-columns: 1fr; }
+}
+
+/* ---- 12. Toolbox chips (Flexbox wrap) ---- */
+.stack-row { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 1.5rem; }
+.stack-row .chip {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+}
+
+/* ---- 13. Footer (Flexbox) ---- */
+.footer {
+  max-width: var(--maxw); margin: 0 auto;
+  padding: clamp(3rem, 6vw, 4rem) clamp(1.25rem, 4vw, 2rem);
+  display: flex; flex-wrap: wrap; gap: 1.5rem;
+  justify-content: space-between; align-items: center;
+}
+.footer__text { color: var(--text-muted); font-size: 0.9rem; }
+.footer__social { display: flex; gap: 1.3rem; }
+.footer__social a { font-size: 0.88rem; color: var(--text-muted); }
+
+/* ---- 14. Back-to-top button (base position) ---- */
+.to-top {
+  position: fixed; right: 1.5rem; bottom: 1.5rem;
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  z-index: 20;
+}
+
+/* ---- 15. Responsive tweaks ---- */
+@media (max-width: 700px) {
+  .footer { flex-direction: column; align-items: flex-start; }
+}

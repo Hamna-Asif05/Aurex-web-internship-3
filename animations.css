@@ -1,0 +1,113 @@
+/* ============================================
+   AUREX Week 3 — animations.css
+   Transitions, hover states, keyframes, scroll-reveal
+   ============================================ */
+
+/* Respect users who've asked for less motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* ---- 1. Global transition base ---- */
+body { transition: background 0.4s ease, color 0.4s ease; }
+
+/* Visible keyboard focus for accessibility */
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---- 2. Nav link underline sweep ---- */
+.nav__link { transition: color 0.25s ease; }
+.nav__link:hover { color: var(--text); }
+.nav__link::after { transition: width 0.3s ease; }
+.nav__link:hover::after { width: 100%; }
+
+/* ---- 3. Theme toggle thumb slide ---- */
+.theme-toggle__thumb { transition: transform 0.3s ease; }
+
+/* ---- 4. Hero load-in — ONE orchestrated staggered reveal ---- */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.anim-item {
+  opacity: 0;
+  animation: fadeUp 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  animation-delay: calc(var(--d) * 0.1s);
+}
+
+/* ---- 5. Buttons — hover lift + ripple ---- */
+.btn {
+  transition: transform 0.25s ease, box-shadow 0.25s ease,
+              background 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
+}
+.btn:active { transform: translateY(0); }
+
+.btn--primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px -8px color-mix(in srgb, var(--accent) 55%, transparent),
+              0 1px 0 rgba(255,255,255,0.15) inset;
+}
+.btn--ghost:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  color: var(--accent);
+}
+
+@keyframes ripple {
+  from { width: 0; height: 0; opacity: 0.55; }
+  to   { width: 240px; height: 240px; opacity: 0; }
+}
+.btn__ripple {
+  position: absolute;
+  width: 10px; height: 10px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: ripple 0.6s ease-out forwards;
+}
+
+/* ---- 6. Project card — hover elevation ---- */
+.project-card { transition: background 0.3s ease, border-color 0.3s ease; }
+.project-card:hover { background: var(--bg-soft); border-color: var(--accent); }
+.project-card__title { transition: color 0.25s ease; }
+.project-card:hover .project-card__title { color: var(--accent); }
+.project-card__arrow { transition: transform 0.25s ease; }
+.project-card:hover .project-card__arrow { transform: translateX(4px); }
+
+/* ---- 7. Skill bars — fill on scroll into view ---- */
+.skill__bar-fill { transition: width 1s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.skill-group.is-visible .skill__bar-fill { width: var(--pct); }
+
+/* ---- 8. Toolbox chip hover ---- */
+.stack-row .chip { transition: border-color 0.25s ease, color 0.25s ease; }
+.stack-row .chip:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ---- 9. Contact form focus + footer link hover ---- */
+.field input, .field textarea { transition: border-color 0.25s ease; }
+.field input:focus, .field textarea:focus { border-color: var(--accent); }
+.contact__email { transition: border-color 0.25s ease, color 0.25s ease; }
+.contact__email:hover { color: var(--accent); border-color: var(--accent); }
+.footer__social a { transition: color 0.25s ease; }
+.footer__social a:hover { color: var(--accent); }
+
+/* ---- 10. Scroll-reveal for every section ---- */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+              transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+/* ---- 11. Back-to-top button ---- */
+.to-top {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease, border-color 0.25s ease;
+}
+.to-top.is-visible { opacity: 1; pointer-events: auto; }
+.to-top:hover { border-color: var(--accent); transform: translateY(-3px); }
